@@ -34,26 +34,26 @@ def parse_tsv(tsv):
         if line.startswith("[end]"):
             break
         cells = line.split("\t")
-        date = cells[0][:4] + '-' + cells[0][4:6] + '-' + cells[0][6:8]
+        startdate = cells[0][:4] + '-' + cells[0][4:6] + '-' + cells[0][6:8]
+        enddate = cells[2][:4] + '-' + cells[2][4:6] + '-' + cells[2][6:8]
 
         for col in  range(1, len(cells)):
             if not is_number(cells[-col]):
                 title = cells[-col]
                 break
-        date_object = datetime.strptime(date, "%Y-%m-%d") + timedelta(hours=11)
-        if date_object >= now:
-            if last_date_object == None:
-              last_date_object = date_object
+        startdate_object = datetime.strptime(startdate, "%Y-%m-%d") + timedelta(hours=11)
+        enddate_object = datetime.strptime(enddate, "%Y-%m-%d") + timedelta(hours=11)
             
-            # now gatya
-            if last_date_object == date_object:
-              print(f"\033[38;5;210m{date} {title}\033[0m")
+        # now gatya
+        if enddate_object > now >= startdate_object:
+          print(f"\033[38;5;210m{startdate} {title}\033[0m")
 
-            # future gatya
-            else:
-              print(f"\033[38;5;216m{date} {title}\033[0m")
+        # future gatya
+        elif enddate_object > now < startdate_object:
+          print(f"\033[38;5;216m{startdate} {title}\033[0m")
         else:
-            print(f"\033[38;5;245m{date} {title}\033[0m")
+          print(f"\033[38;5;245m{startdate} {title}\033[0m")
+        
 
 def main():
     command_url = "https://bc-seek.godfat.org/seek/jp/gatya.tsv"
