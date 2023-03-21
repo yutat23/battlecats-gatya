@@ -34,15 +34,15 @@ def parse_tsv(tsv):
         if line.startswith("[end]"):
             break
         cells = line.split("\t")
-        startdate = cells[0][:4] + '-' + cells[0][4:6] + '-' + cells[0][6:8]
-        enddate = cells[2][:4] + '-' + cells[2][4:6] + '-' + cells[2][6:8]
+        startdate = cells[0][:4] + '-' + cells[0][4:6] + '-' + cells[0][6:8] + '-' + cells[1][:2] + '-' + cells[1][2:4].zfill(2)
+        enddate = cells[2][:4] + '-' + cells[2][4:6] + '-' + cells[2][6:8] + '-' + cells[3][:2] + '-' + cells[3][2:4].zfill(2)
 
         for col in  range(1, len(cells)):
             if not is_number(cells[-col]):
                 title = cells[-col]
                 break
-        startdate_object = datetime.strptime(startdate, "%Y-%m-%d") + timedelta(hours=11)
-        enddate_object = datetime.strptime(enddate, "%Y-%m-%d") + timedelta(hours=11)
+        startdate_object = datetime.strptime(startdate, "%Y-%m-%d-%H-%M")
+        enddate_object = datetime.strptime(enddate, "%Y-%m-%d-%H-%M")
             
         # now gatya
         if enddate_object > now >= startdate_object:
